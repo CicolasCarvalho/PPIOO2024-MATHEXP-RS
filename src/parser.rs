@@ -151,16 +151,22 @@ impl ExpressionTree {
     self_ref.borrow().display(0);
   }
 
-  pub fn eval(&mut self) -> i64 {
+  pub fn eval(&mut self, is_bench: bool) -> i64 {
     let root = self.root.clone();
     let mut token = root.borrow().token;
 
     while !token.is_literal() {
       eval_step(root.clone());
 
-      root.borrow().print_exp();
+      if !is_bench {
+        root.borrow().print_exp();
+      }
+
       token = root.borrow().token;
-      print!("\n");
+
+      if !is_bench {
+        print!("\n");
+      }
     }
 
     match token {
